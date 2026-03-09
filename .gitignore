@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Raw exports (手动导出的原始 txt，不纳入版本控制)
+raw/
+
+# OS
+.DS_Store
+
+# 本地凭证（不要 commit！）
+.temp
+*.env
+.env*
+
+# 输出数据（Fork 后请删除此行，以便 Actions 自动 commit 你的记录）
+# Output data — remove this line after forking so Actions can commit your records
+json/*.jsonl

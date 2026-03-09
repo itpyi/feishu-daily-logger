@@ -1,0 +1,56 @@
+name: Daily Feishu Collect
+
+on:
+  schedule:
+    # UTC 16:00 = 北京时间（CST）次日 00:00
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '手动指定日期（YYYYMMDD），留空则默认昨天'
+        required: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # 允许 push commit
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch Feishu messages
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_CHAT_ID: ${{ secrets.FEISHU_CHAT_ID }}
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            python fetch_feishu.py --date "${{ github.event.inputs.date }}"
+          else
+            python fetch_feishu.py
+          fi
+
+      - name: Commit and push if new data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add json/
+          # 只在有新增文件时才 commit
+          if git diff --cached --quiet; then
+            echo "No new data, skipping commit."
+          else
+            DATE_LABEL=$(TZ='Asia/Shanghai' date -d 'yesterday' '+%Y-%m-%d' 2>/dev/null || TZ='Asia/Shanghai' date -v-1d '+%Y-%m-%d')
+            git commit -m "feat: collect messages for ${DATE_LABEL}"
+            git push
+          fi
