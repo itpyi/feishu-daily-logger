@@ -16,6 +16,3 @@ raw/
 *.env
 .env*
 
-# 输出数据（Fork 后请删除此行，以便 Actions 自动 commit 你的记录）
-# Output data — remove this line after forking so Actions can commit your records
-json/*.jsonl
