@@ -1,8 +1,6 @@
 # feishu-daily-logger
 
-**用飞书群聊 + GitHub Actions 自动收集每日消息，零服务器、完全免费。**
-
-每天零点，GitHub Actions 自动调用飞书开放平台 API，拉取前一天在**记录群聊**里发送的所有消息，格式化为 JSONL 存入仓库。
+本项目服务于[P 人的自我管理：大语言模型辅助的自我认知实验](https://itpyi.site/blog/posts/LLM-assist-self-awareness/)。目前仅配置了数据采集部分。实现一个低门槛的自我观察的数据收集：用飞书群聊 + GitHub Actions 自动收集每日消息，每天零点，GitHub Actions 自动调用飞书开放平台 API，拉取前一天在**记录群聊**里发送的所有消息，格式化为 JSONL 存入仓库。录入无摩擦，整理完全自动，无经济负担。GitHub 私有仓库中 GitHub Actions 额度为每月 2000 分钟，参见[官方文档](https://docs.github.com/en/actions/reference/limits)，本项目数据采集运行一次少于 20 秒，每天自动运行一次。
 
 > **输入方式**：在飞书中建一个只有你和 bot 的群聊，平时向这个群发消息即可。
 
